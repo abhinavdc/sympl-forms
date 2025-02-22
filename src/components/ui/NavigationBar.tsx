@@ -1,6 +1,5 @@
 import { Container, Flex, Grid, HStack } from "@chakra-ui/react";
 import { TabNavigation } from "./TabNavigation";
-import { items } from "@/data/nav";
 import { Logo } from "./Logo";
 import { Avatar } from "./avatar";
 
@@ -17,7 +16,7 @@ export default function NavigationBar() {
           <Logo />
         </HStack>
         <Flex justify="center">
-          <TabNavigation items={items} hideBelow="xs" />
+          <TabNavigation />
         </Flex>
         <Flex w="140px" justifyContent="flex-end">
           <Avatar src="https://i.pravatar.cc/300" name="Abhinav"/>

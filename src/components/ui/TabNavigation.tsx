@@ -1,26 +1,16 @@
-import { Tabs, type TabsRootProps } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import type { NavItem } from "../../data/nav";
+import { Tabs } from "@chakra-ui/react";
+import { useTabStore } from "@/data/store";
 
-interface Props extends TabsRootProps {
-  items?: NavItem[];
-}
-
-export const TabNavigation = (props: Props) => {
-  const { items = [], ...rest } = props;
-  const [activeTab, setActiveTab] = useState(items[0]?.value);
-  useEffect(() => {
-    setActiveTab(items[0]?.value);
-  }, [items]);
+export const TabNavigation = () => {
+  const { tabs, selectedTab, setSelectedTab } = useTabStore();
 
   return (
     <Tabs.Root
-      value={activeTab}
-      onValueChange={(e) => setActiveTab(e.value)}
+      value={selectedTab}
+      onValueChange={(e) => setSelectedTab(e.value)}
       variant="plain"
       size="sm"
       colorPalette="gray"
-      {...rest}
     >
       <Tabs.List
         alignItems="center"
@@ -30,7 +20,7 @@ export const TabNavigation = (props: Props) => {
         borderRadius="l3"
         bg={{ base: "bg.muted", _dark: "transparent" }}
       >
-        {items.map(({ value, label }) => (
+        {tabs.map(({ value, label }) => (
           <Tabs.Trigger key={value} value={value} h="8">
             {label}
           </Tabs.Trigger>
