@@ -1,7 +1,6 @@
 import Builder from "@/pages/Builder";
 import Preview from "@/pages/Preview";
 import Responses from "@/pages/Responses";
-import { JSX } from "react";
 
 export const items: NavItem[] = [
   {
@@ -16,5 +15,5 @@ export const items: NavItem[] = [
 export interface NavItem {
   value: string;
   label: string;
-  component: () => JSX.Element;
+  component: React.ComponentType;
 }

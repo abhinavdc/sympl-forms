@@ -6,7 +6,7 @@ import { Avatar } from "./avatar";
 export default function NavigationBar() {
 
   return (
-    <Container py="2" w="100%" top="0" position="absolute">
+    <Container py="2" w="100%" top="0" position="absolute" bg="gray.50">
       <Grid
         templateColumns="auto 1fr auto"
         gap="3"
@@ -18,9 +18,9 @@ export default function NavigationBar() {
         <Flex justify="center">
           <TabNavigation />
         </Flex>
-        <Flex w="140px" justifyContent="flex-end">
+        <HStack maxW="140px" justifyContent="flex-end">
           <Avatar src="https://i.pravatar.cc/300" name="Abhinav"/>
-        </Flex>
+        </HStack>
       </Grid>
     </Container>
   );

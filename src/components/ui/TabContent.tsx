@@ -1,8 +1,13 @@
+import { items } from "@/data/nav";
 import { useTabStore } from "@/data/store";
 
 export default function TabContent() {
-  const { tabs, selectedTab } = useTabStore();
+  const { selectedTab } = useTabStore();
+  const selectedItem = items.find((x) => x.value === selectedTab)
 
-  const comp = tabs.find((x) => x.value === selectedTab)?.component;
-  return comp?.();
+  if (!selectedItem) return null;
+
+  const Component = selectedItem.component;
+
+  return <Component />
 }
