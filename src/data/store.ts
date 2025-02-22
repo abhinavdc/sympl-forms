@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import { items, NavItem } from "./nav";
-import { QUESTION_TYPE } from "./constants";
+import { QUESTION_TYPE, QUESTION_TYPE_ICON } from "./constants";
 import { adjectives, colors, uniqueNamesGenerator } from "unique-names-generator";
+import { IconType } from "react-icons";
+import { capitalizeFirstLetter } from "@/helper/textHelper";
 
 const randomName = uniqueNamesGenerator({ dictionaries: [adjectives, colors], separator: " ", style: "capital"}); 
 
@@ -44,6 +46,7 @@ export interface Question {
   id: string;
   type: QUESTION_TYPE;
   editable: boolean;
+  icon?: IconType;
 
   meta: {
     label: string;
@@ -60,9 +63,9 @@ function initQuestionFromType(type: QUESTION_TYPE): Question {
     id: String(Math.random()),
     type,
     editable: true,
-
+    icon: QUESTION_TYPE_ICON[type],
     meta: {
-      label: "Question Goes Here",
+      label: capitalizeFirstLetter(type as string) + " Question Goes Here",
       options: [],
       required: false,
       validation: {
@@ -76,6 +79,7 @@ interface FormBuilderStore {
   questions: Question[];
   addQuestion: (value: QUESTION_TYPE) => void;
   removeQuestion: (id: string) => void;
+  updateQuestion: (id: string, data: Question) => void;
 }
 
 export const useFormBuilderStore = create<FormBuilderStore>((set) => ({
@@ -86,4 +90,10 @@ export const useFormBuilderStore = create<FormBuilderStore>((set) => ({
     })),
   removeQuestion: (id: string) =>
     set((state) => ({ questions: state.questions.filter((x) => x.id !== id) })),
+  updateQuestion: (id: string, data: Question) =>
+    set((state) => ({
+      questions: state.questions.map((question) =>
+        question.id === id ? { ...question, ...data } : question
+      ),
+    })),
 }));
