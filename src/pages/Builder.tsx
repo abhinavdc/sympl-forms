@@ -21,6 +21,13 @@ export default function Builder() {
   } = useFormBuilderStore();
 
   const lastQuestionRef = useRef<HTMLInputElement | null>(null);
+  const isInitialRender = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isInitialRender.current = true;
+    };
+  }, []);
 
   function addQuestionHandler(type: QUESTION_TYPE) {
     addQuestion(type);
@@ -37,18 +44,25 @@ export default function Builder() {
       updateQuestion(id, data, true);
     } catch (err) {
       if (err instanceof ZodError) {
-        console.error(err.errors); // Array of Zod issues
+        console.error(err.errors);
       }
       updateQuestion(id, data, false);
     }
   }
 
   useEffect(() => {
-    getQuestions();
-  }, [getQuestions]);
+    if (!questions?.length) {
+      getQuestions();
+    }
+  }, [getQuestions, questions?.length]);
 
   // Scroll to last question when array changes
   useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+
     if (lastQuestionRef.current && !addingQuestion) {
       lastQuestionRef.current.scrollIntoView({
         behavior: "smooth",
