@@ -1,5 +1,5 @@
 import { capitalizeFirstLetter } from "@/helper/textHelper";
-import { QUESTION_TYPE, QUESTION_TYPE_ICON } from "./constants";
+import { QUESTION_TYPE } from "./constants";
 import {
   uniqueNamesGenerator,
   adjectives,
@@ -14,7 +14,6 @@ function initQuestionFromType(type: QUESTION_TYPE): Question {
     id: String(Math.random()),
     type,
     editable: true,
-    icon: QUESTION_TYPE_ICON[type],
     meta: {
       label: capitalizeFirstLetter(type as string) + " Question Goes Here",
       options: [],

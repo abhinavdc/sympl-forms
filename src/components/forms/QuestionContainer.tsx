@@ -1,9 +1,8 @@
 import { Box, Center, Flex, Icon, IconButton, VStack } from "@chakra-ui/react";
 import { LuTrash } from "react-icons/lu";
 import { Checkbox } from "../ui/checkbox";
-import { IconType } from "react-icons";
 import { Tooltip } from "../ui/tooltip";
-import { QUESTION_TYPE } from "@/data/constants";
+import { QUESTION_TYPE, QUESTION_TYPE_ICON } from "@/data/constants";
 
 export default function QuestionContainer({
   onRemove,
@@ -11,16 +10,14 @@ export default function QuestionContainer({
   onChangeRequired,
   required,
   type,
-  icon,
   hideFooter,
   children,
 }: {
   onRemove?: VoidFunction;
   removing?: boolean;
-  onChangeRequired?: (checked: boolean) => void,
+  onChangeRequired?: (checked: boolean) => void;
   required?: boolean;
-  type?: QUESTION_TYPE,
-  icon?: IconType,
+  type?: QUESTION_TYPE;
   hideFooter?: boolean;
   children: React.ReactNode;
 }) {
@@ -37,12 +34,20 @@ export default function QuestionContainer({
       <Box w="100%">{children}</Box>
       {!hideFooter && (
         <Flex w="100%" h="50px" justifyContent="space-between" px="5px">
-      {icon && <Tooltip content={type}>
-        <Icon as={icon} position="absolute" right="15px" top="15px"/>
-      </Tooltip>}
+          {type && (
+            <Tooltip content={type}>
+              <Icon as={QUESTION_TYPE_ICON[type]} position="absolute" right="15px" top="15px" />
+            </Tooltip>
+          )}
 
           <Center px="10px">
-            <Checkbox checked={required} onCheckedChange={(e) => onChangeRequired?.(!!e.checked)} size="sm">Required</Checkbox>
+            <Checkbox
+              checked={required}
+              onCheckedChange={(e) => onChangeRequired?.(!!e.checked)}
+              size="sm"
+            >
+              Required
+            </Checkbox>
           </Center>
           <Center>
             <IconButton

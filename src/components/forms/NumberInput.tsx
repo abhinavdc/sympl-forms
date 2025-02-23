@@ -29,7 +29,6 @@ export default function NumberInput({
       required={data.meta.required}
       onChangeRequired={onChangeRequiredHandler}
       type={data.type}
-      icon={data.icon}
       onRemove={onRemove}
       removing={removing}
     >

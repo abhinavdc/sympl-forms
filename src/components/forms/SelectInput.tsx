@@ -71,7 +71,7 @@ export default function SelectInput({
   }
 
   return (
-    <QuestionContainer required={data.meta.required} onChangeRequired={onChangeRequiredHandler} type={data.type} icon={data.icon} onRemove={onRemove} removing={removing}>
+    <QuestionContainer required={data.meta.required} onChangeRequired={onChangeRequiredHandler} type={data.type} onRemove={onRemove} removing={removing}>
       <Field.Root px="5">
         <Field.Label justifyContent="space-between" w="100%" p="5px">
           <Input
