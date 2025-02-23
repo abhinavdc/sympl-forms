@@ -8,9 +8,9 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import QuestionContainer from "./QuestionContainer";
-import { Question } from "@/data/store";
 import { LuCircleMinus, LuPlus } from "react-icons/lu";
 import { Ref } from "react";
+import { Question } from "@/data/types";
 
 export default function SelectInput({
   ref,
@@ -26,6 +26,16 @@ export default function SelectInput({
   data: Question;
   onChange: (data: Question) => void;
 } & InputProps) {
+  function onChangeRequiredHandler(checked: boolean) {
+    onChange({
+      ...data,
+      meta: {
+        ...data.meta,
+        required: checked
+      },
+    });
+  }
+
   function addOption() {
     onChange({
       ...data,
@@ -53,7 +63,7 @@ export default function SelectInput({
       ...data,
       meta: {
         ...data.meta,
-        options: data.meta.options.map((option, optionIndex) =>
+        options: data.meta.options.map((option: string, optionIndex: number) =>
           optionIndex === index ? value : option
         ),
       },
@@ -61,7 +71,7 @@ export default function SelectInput({
   }
 
   return (
-    <QuestionContainer type={data.type} icon={data.icon} onRemove={onRemove} removing={removing}>
+    <QuestionContainer required={data.meta.required} onChangeRequired={onChangeRequiredHandler} type={data.type} icon={data.icon} onRemove={onRemove} removing={removing}>
       <Field.Root px="5">
         <Field.Label justifyContent="space-between" w="100%" p="5px">
           <Input
@@ -82,8 +92,8 @@ export default function SelectInput({
           />
         </Field.Label>
         <VStack alignItems="flex-start">
-          {data.meta.options.map((x, index) => (
-            <HStack>
+          {data.meta.options.map((x: string, index: number) => (
+            <HStack key={index}>
               <Input
                 value={x}
                 onChange={(e) => updateOption(index, e.target.value)}

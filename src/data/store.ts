@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { items, NavItem } from "./nav";
 import { QUESTION_TYPE } from "./constants";
-import { IconType } from "react-icons";
 import { mockApi } from "./api";
+import { Question } from "./types";
 
 interface TabStore {
   tabs: NavItem[];
@@ -16,29 +16,6 @@ export const useTabStore = create<TabStore>((set) => ({
   setSelectedTab: (value: string) => set(() => ({ selectedTab: value })),
 }));
 
-export type ValidationType = "regex" | "length";
-
-export interface ValidationRule {
-  type: ValidationType;
-  pattern: string;
-}
-
-export interface Question {
-  id: string;
-  type: QUESTION_TYPE;
-  editable: boolean;
-  icon?: IconType;
-
-  meta: {
-    label: string;
-    options: string[];
-    required: boolean;
-    validation: {
-      rules: ValidationRule[];
-    };
-  };
-}
-
 interface FormBuilderStore {
   questions: Question[];
   addingQuestion: boolean;
@@ -48,7 +25,7 @@ interface FormBuilderStore {
   getQuestions: () => void;
   addQuestion: (value: QUESTION_TYPE) => void;
   removeQuestion: (id: string) => void;
-  updateQuestion: (id: string, data: Question) => void;
+  updateQuestion: (id: string, data: Question, valid: boolean) => void;
 }
 
 export const useFormBuilderStore = create<FormBuilderStore>((set) => ({
@@ -80,7 +57,7 @@ export const useFormBuilderStore = create<FormBuilderStore>((set) => ({
     if (removed) {
       set((state) => ({
         questions: state.questions.filter((x) => x.id !== id),
-        removingQuestionId: null
+        removingQuestionId: null,
       }));
     } else {
       set(() => ({
@@ -88,10 +65,26 @@ export const useFormBuilderStore = create<FormBuilderStore>((set) => ({
       }));
     }
   },
-  updateQuestion: (id: string, data: Question) =>
+  updateQuestion: async (id: string, data: Question, valid: boolean) => {
+    if (valid) {
+      // call mock API when data is valid to set in localstorage
+      set(() => ({
+        updatingQuestionId: id,
+      }));
+      mockApi.updateQuestion(id, data).then((updated) => {
+        if (updated) {
+          console.log("Updated Local Storage", id)
+          set(() => ({
+            updatingQuestionId: null,
+          }));
+        }
+      });
+    }
+    // update zustand store even if invalid
     set((state) => ({
       questions: state.questions.map((question) =>
         question.id === id ? { ...question, ...data } : question
       ),
-    })),
+    }));
+  },
 }));

@@ -1,6 +1,6 @@
 import { Field, Input } from "@chakra-ui/react";
 import QuestionContainer from "./QuestionContainer";
-import { Question } from "@/data/store";
+import { Question } from "@/data/types";
 
 export default function FormHeader({
     ref,

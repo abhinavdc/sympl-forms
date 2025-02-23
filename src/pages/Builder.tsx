@@ -1,9 +1,12 @@
 import AddQuestion from "@/components/forms/AddQuestion";
 import QuestionDisplay from "@/components/forms/QuestionDisplay";
 import { QUESTION_TYPE } from "@/data/constants";
-import { Question, useFormBuilderStore } from "@/data/store";
+import { useFormBuilderStore } from "@/data/store";
+import { Question } from "@/data/types";
+import { QuestionsArraySchema } from "@/helper/validations";
 import { Box, Button, Center, Flex, Spinner, VStack } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
+import { ZodError } from "zod";
 
 export default function Builder() {
   const {
@@ -28,7 +31,16 @@ export default function Builder() {
   }
 
   function handleDataChange(id: string, data: Question) {
-    updateQuestion(id, data);
+    try {
+      const validatedData = QuestionsArraySchema.parse([data]);
+      console.log("✅ Validation successful:", validatedData);
+      updateQuestion(id, data, true);
+    } catch (err) {
+      if (err instanceof ZodError) {
+        console.error(err.errors); // Array of Zod issues
+      }
+      updateQuestion(id, data, false);
+    }
   }
 
   useEffect(() => {
@@ -38,7 +50,10 @@ export default function Builder() {
   // Scroll to last question when array changes
   useEffect(() => {
     if (lastQuestionRef.current && !addingQuestion) {
-      lastQuestionRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      lastQuestionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     }
   }, [addingQuestion]);
 

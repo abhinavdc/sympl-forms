@@ -1,11 +1,11 @@
 import { capitalizeFirstLetter } from "@/helper/textHelper";
 import { QUESTION_TYPE, QUESTION_TYPE_ICON } from "./constants";
-import { Question } from "./store";
 import {
   uniqueNamesGenerator,
   adjectives,
   colors,
 } from "unique-names-generator";
+import { Question } from "./types";
 
 const STORAGE_KEY = "mock_questions";
 
@@ -53,7 +53,7 @@ export const mockApi = {
       setTimeout(() => {
         const data = localStorage.getItem(STORAGE_KEY);
         const parseData = data ? JSON.parse(data) : [];
-        resolve(parseData.length ? parseData: [FORM_HEADER_QUESTION]);
+        resolve(parseData.length ? parseData : [FORM_HEADER_QUESTION]);
       }, 2000); // Simulate network latency
     }),
 
@@ -84,5 +84,22 @@ export const mockApi = {
           reject(new Error("Question not found")); // Reject if ID is not found
         }
       }, 2000);
-    })
+    }),
+  updateQuestion: (id: string, newData: Question) =>
+    new Promise<boolean>((resolve, reject) => {
+      setTimeout(() => {
+        const data = localStorage.getItem(STORAGE_KEY);
+        const questions = data ? JSON.parse(data) : [];
+
+        const index = questions.findIndex((q: Question) => q.id === id);
+
+        if (index !== -1) {
+          questions.splice(index, 1, newData); // Replaces the question by ID
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
+          resolve(true);
+        } else {
+          reject(new Error("Question not found")); // Reject if ID is not found
+        }
+      }, 2000);
+    }),
 };

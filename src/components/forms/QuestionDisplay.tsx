@@ -4,8 +4,8 @@ import SelectInput from "./SelectInput";
 import TextInput from "./TextInput";
 import { QUESTION_TYPE } from "@/data/constants";
 import FormHeader from "./FormHeader";
-import { Question } from "@/data/store";
 import { forwardRef } from "react";
+import { Question } from "@/data/types";
 
 const QuestionDisplay = forwardRef(
   ({

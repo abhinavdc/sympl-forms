@@ -6,17 +6,21 @@ import { Tooltip } from "../ui/tooltip";
 import { QUESTION_TYPE } from "@/data/constants";
 
 export default function QuestionContainer({
-  type,
-  icon,
   onRemove,
   removing,
+  onChangeRequired,
+  required,
+  type,
+  icon,
   hideFooter,
   children,
 }: {
+  onRemove?: VoidFunction;
+  removing?: boolean;
+  onChangeRequired?: (checked: boolean) => void,
+  required?: boolean;
   type?: QUESTION_TYPE,
   icon?: IconType,
-  onRemove: VoidFunction;
-  removing: boolean;
   hideFooter?: boolean;
   children: React.ReactNode;
 }) {
@@ -38,7 +42,7 @@ export default function QuestionContainer({
       </Tooltip>}
 
           <Center px="10px">
-            <Checkbox size="sm">Required</Checkbox>
+            <Checkbox checked={required} onCheckedChange={(e) => onChangeRequired?.(!!e.checked)} size="sm">Required</Checkbox>
           </Center>
           <Center>
             <IconButton
