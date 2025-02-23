@@ -44,6 +44,7 @@ interface FormBuilderStore {
   addingQuestion: boolean;
   fetchingQuestions: boolean;
   removingQuestionId: string | null;
+  updatingQuestionId: string | null;
   getQuestions: () => void;
   addQuestion: (value: QUESTION_TYPE) => void;
   removeQuestion: (id: string) => void;
@@ -55,6 +56,7 @@ export const useFormBuilderStore = create<FormBuilderStore>((set) => ({
   addingQuestion: false,
   fetchingQuestions: false,
   removingQuestionId: null,
+  updatingQuestionId: null,
   getQuestions: async () => {
     set({ fetchingQuestions: true });
     const data = await mockApi.getQuestions();

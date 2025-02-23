@@ -1,19 +1,13 @@
-import { Center, Container, Flex, Grid, HStack, Spinner, Text } from "@chakra-ui/react";
+import { Container, Flex, Grid, HStack } from "@chakra-ui/react";
 import { TabNavigation } from "./TabNavigation";
 import { Logo } from "./Logo";
 import { Avatar } from "./avatar";
 import { useFormBuilderStore } from "@/data/store";
-import { keyframes } from "@emotion/react";
-
-const blink = keyframes`
-  0% { opacity: 1; }
-  50% { opacity: 0.4; }
-  100% { opacity: 1; }
-`;
+import SavingIndicator from "./SavingIndicator";
 
 export default function NavigationBar() {
-  const { addingQuestion, removingQuestionId } = useFormBuilderStore();
-
+  const { addingQuestion, removingQuestionId, updatingQuestionId } =
+    useFormBuilderStore();
 
   return (
     <Container py="2" w="100%" top="0" position="absolute" bg="gray.50">
@@ -24,14 +18,17 @@ export default function NavigationBar() {
         <Flex justify="center">
           <TabNavigation />
         </Flex>
-        <HStack w={{ md: "140px", sm: "unset" }} justifyContent="flex-end" gap="5">
-          {(removingQuestionId ||addingQuestion) && (
-            <Center>
-              <Text color="gray.500" fontSize="sm" animation={`${blink} 1s infinite ease-in-out`}>Saving...</Text>
+        <HStack
+          w={{ md: "140px", sm: "unset" }}
+          justifyContent="flex-end"
+          gap="5"
+        >
+          <SavingIndicator
+            isSaving={
+              !!removingQuestionId || addingQuestion || !!updatingQuestionId
+            }
+          />
 
-            </Center>
-           
-          )}
           <Avatar src="https://i.pravatar.cc/300" name="Abhinav" />
         </HStack>
       </Grid>
