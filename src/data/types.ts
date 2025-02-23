@@ -22,4 +22,6 @@ export interface Question {
       rules: ValidationRule[];
     };
   };
+
+  value?: string | number;
 }
