@@ -19,7 +19,8 @@ export default function NavigationBar() {
           <TabNavigation />
         </Flex>
         <HStack
-          w={{ md: "140px", sm: "unset" }}
+          display={{ smDown: "none", base: "flex" }}
+          w={{ md: "140px", smDown: "unset" }}
           justifyContent="flex-end"
           gap="5"
         >

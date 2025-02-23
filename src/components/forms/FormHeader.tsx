@@ -16,7 +16,7 @@ export default function FormHeader({
   return (
     <QuestionContainer hideFooter onRemove={onRemove}>
       <Field.Root h="60px" p="10px" ref={ref}>
-        <Field.Label>
+        <Field.Label  w="100%">
           <Input
             w="400px"
             _focusVisible={{ boxShadow: "0 0px 0 0 black inset"}}
