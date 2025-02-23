@@ -3,17 +3,19 @@ import QuestionContainer from "./QuestionContainer";
 import { Question } from "@/data/store";
 
 export default function FormHeader({
+    ref,
     onChange,
-  data,
-  onRemove,
+    data,
+    onRemove,
 }: {
+    ref?: React.Ref<HTMLDivElement>,
     onChange: (data: Question) => void;
   data: Question;
   onRemove: VoidFunction;
 }) {
   return (
     <QuestionContainer hideFooter onRemove={onRemove}>
-      <Field.Root h="60px" p="10px">
+      <Field.Root h="60px" p="10px" ref={ref}>
         <Field.Label>
           <Input
             w="400px"

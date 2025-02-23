@@ -1,27 +1,8 @@
 import { create } from "zustand";
 import { items, NavItem } from "./nav";
-import { QUESTION_TYPE, QUESTION_TYPE_ICON } from "./constants";
-import { adjectives, colors, uniqueNamesGenerator } from "unique-names-generator";
+import { QUESTION_TYPE } from "./constants";
 import { IconType } from "react-icons";
-import { capitalizeFirstLetter } from "@/helper/textHelper";
-
-const randomName = uniqueNamesGenerator({ dictionaries: [adjectives, colors], separator: " ", style: "capital"}); 
-
-const FORM_HEADER_QUESTION =   {
-    id: String(Math.random()),
-    type: QUESTION_TYPE.FORM_HEADER,
-    editable: true,
-
-    meta: {
-      label: randomName + " Form",
-      options: [],
-      required: false,
-      validation: {
-        rules: [],
-      },
-    },
-  };
-
+import { mockApi } from "./api";
 
 interface TabStore {
   tabs: NavItem[];
@@ -58,38 +39,53 @@ export interface Question {
   };
 }
 
-function initQuestionFromType(type: QUESTION_TYPE): Question {
-  return {
-    id: String(Math.random()),
-    type,
-    editable: true,
-    icon: QUESTION_TYPE_ICON[type],
-    meta: {
-      label: capitalizeFirstLetter(type as string) + " Question Goes Here",
-      options: [],
-      required: false,
-      validation: {
-        rules: [],
-      },
-    },
-  };
-}
-
 interface FormBuilderStore {
   questions: Question[];
+  addingQuestion: boolean;
+  fetchingQuestions: boolean;
+  removingQuestionId: string | null;
+  getQuestions: () => void;
   addQuestion: (value: QUESTION_TYPE) => void;
   removeQuestion: (id: string) => void;
   updateQuestion: (id: string, data: Question) => void;
 }
 
 export const useFormBuilderStore = create<FormBuilderStore>((set) => ({
-  questions: [FORM_HEADER_QUESTION],
-  addQuestion: (value: QUESTION_TYPE) =>
+  questions: [],
+  addingQuestion: false,
+  fetchingQuestions: false,
+  removingQuestionId: null,
+  getQuestions: async () => {
+    set({ fetchingQuestions: true });
+    const data = await mockApi.getQuestions();
+    set({ questions: data, fetchingQuestions: false });
+  },
+  addQuestion: async (value: QUESTION_TYPE) => {
+    set(() => ({
+      addingQuestion: true,
+    }));
+    const newQuestion = await mockApi.addQuestion(value);
     set((state) => ({
-      questions: [...state.questions, initQuestionFromType(value)],
-    })),
-  removeQuestion: (id: string) =>
-    set((state) => ({ questions: state.questions.filter((x) => x.id !== id) })),
+      addingQuestion: false,
+      questions: [...state.questions, newQuestion],
+    }));
+  },
+  removeQuestion: async (id: string) => {
+    set(() => ({
+      removingQuestionId: id,
+    }));
+    const removed = await mockApi.removeQuestion(id);
+    if (removed) {
+      set((state) => ({
+        questions: state.questions.filter((x) => x.id !== id),
+        removingQuestionId: null
+      }));
+    } else {
+      set(() => ({
+        removingQuestionId: null,
+      }));
+    }
+  },
   updateQuestion: (id: string, data: Question) =>
     set((state) => ({
       questions: state.questions.map((question) =>

@@ -9,12 +9,14 @@ export default function QuestionContainer({
   type,
   icon,
   onRemove,
+  removing,
   hideFooter,
   children,
 }: {
   type?: QUESTION_TYPE,
   icon?: IconType,
   onRemove: VoidFunction;
+  removing: boolean;
   hideFooter?: boolean;
   children: React.ReactNode;
 }) {
@@ -44,6 +46,7 @@ export default function QuestionContainer({
               aria-label="Remove Question"
               variant="ghost"
               onClick={onRemove}
+              loading={removing}
             >
               <LuTrash />
             </IconButton>

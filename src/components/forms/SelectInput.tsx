@@ -10,13 +10,18 @@ import {
 import QuestionContainer from "./QuestionContainer";
 import { Question } from "@/data/store";
 import { LuCircleMinus, LuPlus } from "react-icons/lu";
+import { Ref } from "react";
 
 export default function SelectInput({
+  ref,
   onChange,
   data,
   onRemove,
+  removing,
   ...rest
 }: {
+  removing: boolean,
+  ref: Ref<HTMLInputElement>,
   onRemove: VoidFunction;
   data: Question;
   onChange: (data: Question) => void;
@@ -56,7 +61,7 @@ export default function SelectInput({
   }
 
   return (
-    <QuestionContainer type={data.type} icon={data.icon} onRemove={onRemove}>
+    <QuestionContainer type={data.type} icon={data.icon} onRemove={onRemove} removing={removing}>
       <Field.Root px="5">
         <Field.Label justifyContent="space-between" w="100%" p="5px">
           <Input
@@ -73,6 +78,7 @@ export default function SelectInput({
               })
             }
             {...rest}
+            ref={ref}
           />
         </Field.Label>
         <VStack alignItems="flex-start">

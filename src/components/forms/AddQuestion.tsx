@@ -14,11 +14,11 @@ const horizontalMenuItems = [
   { label: "Select", value: QUESTION_TYPE.SELECT, icon: QUESTION_TYPE_ICON[QUESTION_TYPE.SELECT] },
 ];
 
-export default function AddQuestion({ onClick } : { onClick: (type: QUESTION_TYPE) => void}) {
+export default function AddQuestion({ onClick, loading } : { onClick: (type: QUESTION_TYPE) => void, loading: boolean}) {
   return (
     <MenuRoot positioning={{ placement: "right-start"}}>
       <MenuTrigger asChild>
-        <IconButton variant="subtle" colorPalette="pink" size="sm">
+        <IconButton variant="subtle" colorPalette="pink" size="sm" loading={loading}>
           <LuSquarePlus />
         </IconButton>
       </MenuTrigger>

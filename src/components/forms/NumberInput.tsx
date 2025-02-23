@@ -1,15 +1,18 @@
 import { Field, Input, InputProps } from "@chakra-ui/react";
 import QuestionContainer from "./QuestionContainer";
 import { Question } from "@/data/store";
+import { Ref } from "react";
 
 export default function NumberInput({
+  ref,
   onChange,
   data,
   onRemove,
+  removing,
   ...rest
-}: { onRemove: VoidFunction; data: Question; onChange: (data: Question) => void  } & InputProps) {
+}: { ref: Ref<HTMLInputElement>, onRemove: VoidFunction; data: Question; onChange: (data: Question) => void, removing: boolean } & InputProps) {
   return (
-    <QuestionContainer type={data.type} icon={data.icon} onRemove={onRemove}>
+    <QuestionContainer type={data.type} icon={data.icon} onRemove={onRemove} removing={removing}>
       <Field.Root px="5">
         <Field.Label justifyContent="space-between" w="100%" p="5px">
           <Input
@@ -25,6 +28,7 @@ export default function NumberInput({
                 meta: { ...data.meta, label: e.target.value },
               })
             }
+            ref={ref}
             {...rest}
           />
         </Field.Label>
