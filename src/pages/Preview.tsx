@@ -1,6 +1,5 @@
 import QuestionViewSwitch from "@/components/preview/QuestionViewSwitch";
 import PageLoader from "@/components/ui/PageLoader";
-import { toaster } from "@/components/ui/toaster";
 import { useFormBuilderStore, useResponsesStore } from "@/data/store";
 import { FormErrors, Question } from "@/data/types";
 import { validateForm } from "@/helper/validations";
@@ -65,13 +64,7 @@ export default function Preview() {
     if (Object.keys(errors).length === 0) {
       const status = await submitResponse(questions)
       if (status.success) {
-        
         showSuccessAlert();
-      } else {
-        toaster.create({
-          title: `Form Submit Failed`,
-          type: "error",
-        });
       }
     }
 
