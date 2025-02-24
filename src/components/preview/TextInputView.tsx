@@ -25,7 +25,8 @@ export default function TextInputView({
             boxShadow: "0 0px 0 0 black inset",
           }}
           variant="flushed"
-          w="400px"
+          w="100%"
+          maxW="400px"
           type="text"
           placeholder="Enter your answer here"
           value={data.value}

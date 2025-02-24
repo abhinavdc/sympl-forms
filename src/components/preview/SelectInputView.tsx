@@ -36,7 +36,8 @@ export default function SelectInputView({
           value={data.value ? [data.value as string] : []}
           onValueChange={(e) => onChange(e.value)}
           variant="outline"
-          width="400px"
+          w="100%"
+          maxW="400px"
         >
           <SelectLabel>
             {data.meta.label}

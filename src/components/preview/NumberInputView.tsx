@@ -25,7 +25,8 @@ errors,
             boxShadow: "0 0px 0 0 black inset",
           }}
           variant="flushed"
-          w="400px"
+          w="100%"
+          maxW="400px"
           type="number"
           placeholder="Enter your answer here"
           value={data.value}
