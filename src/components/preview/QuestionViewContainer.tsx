@@ -6,7 +6,14 @@ export default function QuestionViewContainer({
   children: React.ReactNode;
 }) {
   return (
-    <Box bg="gray.50" w="100%" rounded="md" p="5">
+    <Box
+      bg="gray.50"
+      w="100%"
+      rounded="md"
+      p="5"
+      border="1px solid"
+      borderColor="gray.300"
+    >
       <div>{children}</div>
     </Box>
   );

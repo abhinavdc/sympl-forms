@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { items, NavItem } from "./nav";
 import { QUESTION_TYPE } from "./constants";
 import { mockApi } from "./api";
-import { Question } from "./types";
+import { Question, Response } from "./types";
 
 interface TabStore {
   tabs: NavItem[];
@@ -14,6 +14,47 @@ export const useTabStore = create<TabStore>((set) => ({
   tabs: [...items],
   selectedTab: items[0]?.value,
   setSelectedTab: (value: string) => set(() => ({ selectedTab: value })),
+}));
+interface ResponsesStore {
+  responses: Response[] | null;
+  fetchingResponses: boolean;
+  fetchResponses: () => void;
+  submittingResponse: boolean;
+  submitResponse: (question: Question[]) => Promise<{ success: boolean }>;
+}
+
+export const useResponsesStore = create<ResponsesStore>((set) => ({
+  responses: null,
+  fetchingResponses: false,
+  fetchResponses: async () => {
+    set(() => ({
+      fetchingResponses: true,
+    }));
+    const newResp = await mockApi.fetchResponses();
+    set(() => ({
+      fetchingResponses: false,
+      responses: newResp,
+    }));
+  },
+  submittingResponse: false,
+  submitResponse: async (value: Question[]) => {
+    set(() => ({
+      submittingResponse: true,
+    }));
+    try {
+      const newResp = await mockApi.submitForm(value);
+      set((state) => ({
+        submittingResponse: false,
+        responses: [...(state.responses ?? []), newResp],
+      }));
+      return { success: true };
+    } catch {
+      set(() => ({
+        submittingResponse: false,
+      }));
+      return { success: false };
+    }
+  },
 }));
 
 interface FormBuilderStore {
@@ -34,6 +75,9 @@ export const useFormBuilderStore = create<FormBuilderStore>((set) => ({
   fetchingQuestions: false,
   removingQuestionId: null,
   updatingQuestionId: null,
+  resetFormField: () => {
+    
+  },
   getQuestions: async () => {
     set({ fetchingQuestions: true });
     const data = await mockApi.getQuestions();
@@ -73,7 +117,7 @@ export const useFormBuilderStore = create<FormBuilderStore>((set) => ({
       }));
       mockApi.updateQuestion(id, data).then((updated) => {
         if (updated) {
-          console.log("Updated Local Storage", id)
+          console.log("Updated Local Storage", id);
           set(() => ({
             updatingQuestionId: null,
           }));

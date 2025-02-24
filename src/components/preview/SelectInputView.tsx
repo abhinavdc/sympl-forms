@@ -15,9 +15,11 @@ import {
 } from "../ui/select";
 
 export default function SelectInputView({
+  errors,
   data,
   onChange,
 }: {
+  errors: string[],
   data: Question;
   onChange: (value: string[]) => void;
 }) {
@@ -28,7 +30,7 @@ export default function SelectInputView({
   });
   return (
     <QuestionViewContainer>
-      <Field.Root required={data.meta.required}>
+      <Field.Root required={data.meta.required} invalid={!!errors?.length}>
         <SelectRoot
           collection={options}
           value={data.value ? [data.value as string] : []}
@@ -51,6 +53,9 @@ export default function SelectInputView({
             ))}
           </SelectContent>
         </SelectRoot>
+        <Field.ErrorText>
+          {errors?.[0]}
+        </Field.ErrorText>
       </Field.Root>
     </QuestionViewContainer>
   );

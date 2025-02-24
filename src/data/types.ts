@@ -1,12 +1,38 @@
 import { IconType } from "react-icons";
 import { QUESTION_TYPE } from "./constants";
 
-export type ValidationType = "regex" | "length";
-
-export interface ValidationRule {
-  type: ValidationType;
+type RegexRule = {
+  type: "regex";
   pattern: string;
-}
+  message?: string;
+};
+
+type LengthRule = {
+  type: "length";
+  min?: number;
+  max?: number;
+  message?: string;
+};
+
+type GreaterThanRule = {
+  type: "greater_than";
+  value: number;
+  message?: string;
+};
+
+type LessThanRule = {
+  type: "less_than";
+  value: number;
+  message?: string;
+};
+
+type EqualsRule = {
+  type: "equals";
+  value: string | number;
+  message?: string;
+};
+
+export type ValidationRule = RegexRule | LengthRule | GreaterThanRule | LessThanRule | EqualsRule;
 
 export interface Question {
   id: string;
@@ -24,4 +50,22 @@ export interface Question {
   };
 
   value?: string | number;
+}
+
+export type FormErrors = Record<string, string[]>;
+
+export class Response {
+  submissionId: string;
+  question: Question[];
+  submittedDate: string;
+
+  constructor(question: Question[]) {
+    this.submissionId = this.generateId();
+    this.question = question;
+    this.submittedDate = new Date().toISOString();
+  }
+
+  private generateId(): string {
+    return Math.random().toString(36).substring(2, 10); // Random 8-character ID
+  }
 }

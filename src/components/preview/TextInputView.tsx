@@ -3,15 +3,17 @@ import QuestionViewContainer from "./QuestionViewContainer";
 import { Question } from "@/data/types";
 
 export default function TextInputView({
+  errors,
   data,
   onChange,
 }: {
+  errors: string[],
   data: Question;
-  onChange: (value: number) => void;
+  onChange: (value: string) => void;
 }) {
   return (
     <QuestionViewContainer>
-      <Field.Root required={data.meta.required}>
+      <Field.Root required={data.meta.required} invalid={!!errors?.length}>
         <Field.Label>
           {data.meta.label}
           <Field.RequiredIndicator />
@@ -27,9 +29,13 @@ export default function TextInputView({
           type="text"
           placeholder="Enter your answer here"
           value={data.value}
-          onChange={(e) => onChange(Number(e.target.value))}
+          onChange={(e) => onChange(e.target.value)}
         />
+        <Field.ErrorText>
+          {errors?.[0]}
+        </Field.ErrorText>
       </Field.Root>
+
     </QuestionViewContainer>
   );
 }

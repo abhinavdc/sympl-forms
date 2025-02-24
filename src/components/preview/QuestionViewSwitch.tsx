@@ -1,14 +1,16 @@
 import { QUESTION_TYPE } from "@/data/constants";
-import { Question } from "@/data/types";
+import { FormErrors, Question } from "@/data/types";
 import FormHeaderView from "./FormHeaderView";
 import NumberInputView from "./NumberInputView";
 import TextInputView from "./TextInputView";
 import SelectInputView from "./SelectInputView";
 
 const QuestionViewSwitch = ({
+  errors,
   data,
   onChange,
 }: {
+  errors: FormErrors,
   data: Question;
   onChange: (data: Question) => void;
 }) => {
@@ -19,6 +21,7 @@ const QuestionViewSwitch = ({
       case QUESTION_TYPE.NUMBER:
         return (
           <NumberInputView
+            errors={errors[data.id]}
             data={data}
             onChange={(value) => onChange({ ...data, value })}
           />
@@ -26,14 +29,16 @@ const QuestionViewSwitch = ({
       case QUESTION_TYPE.TEXT:
         return (
           <TextInputView
-            data={data}
+          errors={errors[data.id]}
+          data={data}
             onChange={(value) => onChange({ ...data, value })}
           />
         );
       case QUESTION_TYPE.SELECT:
         return (
           <SelectInputView
-            data={data}
+          errors={errors[data.id]}
+          data={data}
             onChange={(value) =>
               onChange({ ...data, value: value[0] as string })
             }
