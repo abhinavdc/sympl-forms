@@ -115,7 +115,7 @@ export default function ValidationRules({
 
             <HStack>
               <Input
-                w="300px"
+                w="250px"
                 type="number"
                 value={
                   rules.find((rule) => rule.type === "greater_than")?.value ||
@@ -142,7 +142,7 @@ export default function ValidationRules({
             <Field.Label>Less Than:</Field.Label>
             <HStack>
               <Input
-                w="300px"
+                w="250px"
                 type="number"
                 value={
                   rules.find((rule) => rule.type === "less_than")?.value || ""
@@ -166,7 +166,7 @@ export default function ValidationRules({
             <Field.Label>Min Length:</Field.Label>
             <HStack>
               <Input
-                w="300px"
+                w="250px"
                 type="number"
                 value={
                   (
@@ -195,7 +195,7 @@ export default function ValidationRules({
             <Field.Label>Max Length:</Field.Label>
             <HStack>
               <Input
-                w="300px"
+                w="250px"
                 type="number"
                 value={
                   (
@@ -224,9 +224,9 @@ export default function ValidationRules({
             <Field.Label>Regex Pattern:</Field.Label>
             <HStack>
               <Input
-                w="300px"
+                w="250px"
                 type="text"
-                placeholder="Enter regex pattern (eg: ^[A-Z].*$ )"
+                placeholder="Enter pattern (eg: ^[A-Z].*$ )"
                 value={
                   (rules.find((rule) => rule.type === "regex") as RegexRule)
                     ?.pattern || ""
