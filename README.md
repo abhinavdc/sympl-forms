@@ -1,8 +1,8 @@
 ### 📝 Sympl Forms
-A simple form builder built with React and TypeScript that allows users to create, validate, preview and receive responses with auto-save functionality.
+A simple and responsive form builder app built with React and TypeScript that allows users to create forms, preview them, and view submitted responses. It features built-in field validations, auto-save functionality, and mock API interactions using Local Storage.
 
 ### ✨ Features
-Form Builder: Supports Text, Number, and Select fields with built-in validations and auto-save.
+Form Builder: Create forms with Text, Number, and Select fields, custom validation rules, and auto-save with visual feedback.
  - Provide Custom Form Name
  - Auto Save on valid changes with saving indication
  - Validation of Form Builder fields
@@ -10,12 +10,12 @@ Form Builder: Supports Text, Number, and Select fields with built-in validations
  - Mock API fetch from Local Storage on page refresh
  - Custom Validation Rules for Text and Number
 
-Response List: View saved form responses
+Response List: View saved form responses fetched from Local Storage with a collapsible display.
  - Fetch Responses from LocalStorage
  - Show Form Response based on Form Schema
  - Collapsible View
 
-Form Preview: Render and validate forms using the generated schema.
+Form Preview: Render forms using the generated schema, validate inputs, and submit valid responses.
  - Generate Form Preview from Schema
  - Validate Form Values based on Custom Validation Rules and Required Checkbox
  - Submit valid form and save response 
