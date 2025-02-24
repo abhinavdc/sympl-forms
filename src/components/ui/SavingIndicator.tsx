@@ -22,13 +22,13 @@ export default function SavingIndicator({ isSaving }: { isSaving: boolean }) {
   return (
     <Center>
       <Text
-        w="60px"
+        w="80px"
         justifyItems="start"
         fontSize="sm"
         color={isSaving ? "blue.500" : "green.500"}
         animation={isSaving ? `${blink} 1s infinite ease-in-out` : "none"}
       >
-        {isSaving ? "Saving..." : showSaved ? `Saved` : null}
+        {isSaving ? "Saving..." : showSaved ? `Auto Saved` : null}
       </Text>
     </Center>
   );

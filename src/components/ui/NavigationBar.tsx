@@ -30,7 +30,7 @@ export default function NavigationBar() {
             }
           />
 
-          <Avatar src="https://i.pravatar.cc/300" name="Abhinav" />
+          <Avatar display={{ lg: "block", mdDown: "none"}} src="https://i.pravatar.cc/300" name="Abhinav" />
         </HStack>
       </Grid>
     </Container>
