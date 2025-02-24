@@ -21,7 +21,7 @@ export default function NumberInput({
   onChange: (data: Question) => void;
   removing: boolean;
 } & InputProps) {
-  const [showValidationRules, setShowValidationRules] = useState(false);
+  const [showValidationRules, setShowValidationRules] = useState(!!data.meta.validation.rules?.length);
 
   function onChangeRequiredHandler(checked: boolean) {
     onChange({
