@@ -1,15 +1,13 @@
 import { Button, Field, Flex, Input, InputProps } from "@chakra-ui/react";
 import QuestionContainer from "./QuestionContainer";
 import { Ref, useState } from "react";
-import {
-  Question,
-  ValidationRule,
-} from "@/data/types";
+import { Question, QuestionErrors, ValidationRule } from "@/data/types";
 import ValidationRules from "./ValidationRules";
 import { LuChevronDown, LuChevronUp } from "react-icons/lu";
 
 export default function NumberInput({
   ref,
+  errors,
   onChange,
   data,
   onRemove,
@@ -17,12 +15,13 @@ export default function NumberInput({
   ...rest
 }: {
   ref: Ref<HTMLInputElement>;
+  errors: QuestionErrors[number] | null;
   onRemove: VoidFunction;
   data: Question;
   onChange: (data: Question) => void;
   removing: boolean;
 } & InputProps) {
-  const [showValidationRules, setShowValidationRules] = useState(false)
+  const [showValidationRules, setShowValidationRules] = useState(false);
 
   function onChangeRequiredHandler(checked: boolean) {
     onChange({
@@ -44,11 +43,10 @@ export default function NumberInput({
   function handleCustomValidation() {
     if (showValidationRules) {
       // remove validation
-      onRuleChangeHandler([])
+      onRuleChangeHandler([]);
     }
-    setShowValidationRules(!showValidationRules)
+    setShowValidationRules(!showValidationRules);
   }
-  
 
   return (
     <QuestionContainer
@@ -58,7 +56,7 @@ export default function NumberInput({
       onRemove={onRemove}
       removing={removing}
     >
-      <Field.Root px="5" py="2">
+      <Field.Root px="5" py="2" invalid={!!errors?.meta?.label?._errors}>
         <Field.Label justifyContent="space-between" w="100%" p="5px">
           <Input
             _hover={{ bg: "blackAlpha.50" }}
@@ -81,12 +79,25 @@ export default function NumberInput({
             {...rest}
           />
         </Field.Label>
-        <Input value="number answer" disabled />
+        <Field.ErrorText>{errors?.meta?.label?._errors[0]}</Field.ErrorText>
       </Field.Root>
-      {showValidationRules && <ValidationRules rules={data.meta.validation.rules} onChange={onRuleChangeHandler} />}
+      <Field.Root px="5" pb="2">
+        <Input  value="number answer" disabled />
+      </Field.Root>
+      {showValidationRules && (
+        <ValidationRules
+          rules={data.meta.validation.rules}
+          onChange={onRuleChangeHandler}
+        />
+      )}
       <Flex justifyContent="flex-end" px="5">
-        <Button variant="outline" colorPalette="pink" size="xs" onClick={handleCustomValidation}>
-        {showValidationRules ? <LuChevronUp /> : <LuChevronDown /> }
+        <Button
+          variant="outline"
+          colorPalette="pink"
+          size="xs"
+          onClick={handleCustomValidation}
+        >
+          {showValidationRules ? <LuChevronUp /> : <LuChevronDown />}
           {`${showValidationRules ? "Remove" : "Add"} Custom Validation`}
         </Button>
       </Flex>

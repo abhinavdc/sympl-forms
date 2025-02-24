@@ -1,5 +1,7 @@
 import { IconType } from "react-icons";
 import { QUESTION_TYPE } from "./constants";
+import { QuestionsArraySchema } from "@/helper/validations";
+import { z } from "zod";
 
 export type RegexRule = {
   type: "regex";
@@ -77,3 +79,5 @@ export interface ValidationOnChange {
     | keyof GreaterThanRule
     | keyof LessThanRule;
 }
+
+export type QuestionErrors = z.inferFormattedError<typeof QuestionsArraySchema>;

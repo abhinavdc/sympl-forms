@@ -5,12 +5,13 @@ import TextInput from "./TextInput";
 import { QUESTION_TYPE } from "@/data/constants";
 import FormHeader from "./FormHeader";
 import { forwardRef } from "react";
-import { Question } from "@/data/types";
+import { Question, QuestionErrors } from "@/data/types";
 
 const QuestionDisplay = forwardRef(
   ({
     ...rest
   }: {
+    errors: QuestionErrors[number] | null,
     removing: boolean;
     onRemove: VoidFunction;
     data: Question;

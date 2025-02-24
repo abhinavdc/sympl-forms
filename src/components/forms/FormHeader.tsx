@@ -1,13 +1,15 @@
 import { Field, Input } from "@chakra-ui/react";
 import QuestionContainer from "./QuestionContainer";
-import { Question } from "@/data/types";
+import { Question, QuestionErrors } from "@/data/types";
 
 export default function FormHeader({
     ref,
     onChange,
     data,
     onRemove,
-}: {
+    errors,
+  }: {
+    errors: QuestionErrors[number] | null,
     ref?: React.Ref<HTMLDivElement>,
     onChange: (data: Question) => void;
   data: Question;
@@ -15,7 +17,7 @@ export default function FormHeader({
 }) {
   return (
     <QuestionContainer hideFooter onRemove={onRemove}>
-      <Field.Root h="60px" p="10px" ref={ref}>
+      <Field.Root p="10px" ref={ref} invalid={!!errors?.meta?.label?._errors}>
         <Field.Label  w="100%">
           <Input
             w="400px"
@@ -33,6 +35,9 @@ export default function FormHeader({
             value={data.meta.label}
           />
         </Field.Label>
+        <Field.ErrorText>
+          {errors?.meta?.label?._errors[0]}
+        </Field.ErrorText>
       </Field.Root>
     </QuestionContainer>
   );

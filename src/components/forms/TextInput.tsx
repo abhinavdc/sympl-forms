@@ -1,12 +1,13 @@
 import { Button, Field, Flex, Input, InputProps } from "@chakra-ui/react";
 import QuestionContainer from "./QuestionContainer";
 import { Ref, useState } from "react";
-import { Question, ValidationRule } from "@/data/types";
+import { Question, QuestionErrors, ValidationRule } from "@/data/types";
 import { LuChevronUp, LuChevronDown } from "react-icons/lu";
 import ValidationRules from "./ValidationRules";
 
 export default function TextInput({
   ref,
+  errors,
   onChange,
   data,
   onRemove,
@@ -14,6 +15,7 @@ export default function TextInput({
   ...rest
 }: {
   ref: Ref<HTMLInputElement>;
+  errors: QuestionErrors[number] | null;
   onRemove: VoidFunction;
   data: Question;
   onChange: (data: Question) => void;
@@ -28,16 +30,15 @@ export default function TextInput({
     });
   }
 
-    function onRuleChangeHandler(updatedRules: ValidationRule[]) {
-      onChange({
-        ...data,
-        meta: {
-          ...data.meta,
-          validation: { ...data.meta.validation, rules: updatedRules },
-        },
-      });
-    }
-  
+  function onRuleChangeHandler(updatedRules: ValidationRule[]) {
+    onChange({
+      ...data,
+      meta: {
+        ...data.meta,
+        validation: { ...data.meta.validation, rules: updatedRules },
+      },
+    });
+  }
 
   function handleCustomValidation() {
     if (showValidationRules) {
@@ -55,7 +56,7 @@ export default function TextInput({
       onRemove={onRemove}
       removing={removing}
     >
-      <Field.Root px="5" py="2">
+      <Field.Root px="5" py="2" invalid={!!errors?.meta?.label?._errors}>
         <Field.Label justifyContent="space-between" w="100%" p="5px">
           <Input
             _focusVisible={{ boxShadow: "0 0px 0 0 black inset" }}
@@ -74,7 +75,9 @@ export default function TextInput({
             {...rest}
           />
         </Field.Label>
-
+        <Field.ErrorText>{errors?.meta?.label?._errors[0]}</Field.ErrorText>
+      </Field.Root>
+      <Field.Root px="5" pb="2">
         <Input value="short text answer" disabled />
       </Field.Root>
       {showValidationRules && (

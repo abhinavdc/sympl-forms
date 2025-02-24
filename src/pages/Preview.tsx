@@ -2,12 +2,11 @@ import QuestionViewSwitch from "@/components/preview/QuestionViewSwitch";
 import PageLoader from "@/components/ui/PageLoader";
 import { useFormBuilderStore, useResponsesStore } from "@/data/store";
 import { FormErrors, Question } from "@/data/types";
+import { isEmpty } from "@/helper/objectHelper";
 import { validateForm } from "@/helper/validations";
 import { useTemporaryFlag } from "@/hooks/useTemporaryHook";
 import { Button, VStack, Alert } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-
-const isEmpty = (obj: object) => Object.keys(obj).length === 0;
 
 function FormValidationAlert() {
   return (
@@ -36,7 +35,7 @@ function FormResetAlert() {
 }
 
 export default function Preview() {
-  const { questions, getQuestions, fetchingQuestions, updateQuestion } =
+  const { questions, getQuestions, fetchingQuestions, updateQuestion, resetFormField } =
     useFormBuilderStore();
     
   const { submitResponse, submittingResponse } =
@@ -65,6 +64,7 @@ export default function Preview() {
       if (status.success) {
         showSuccessAlert();
       }
+      resetFormField();
     }
   }
 

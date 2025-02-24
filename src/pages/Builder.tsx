@@ -1,12 +1,48 @@
 import AddQuestion from "@/components/forms/AddQuestion";
 import QuestionDisplay from "@/components/forms/QuestionDisplay";
 import { QUESTION_TYPE } from "@/data/constants";
-import { useFormBuilderStore } from "@/data/store";
-import { Question } from "@/data/types";
+import { PREVIEW_TAB } from "@/data/nav";
+import { useFormBuilderStore, useTabStore } from "@/data/store";
+import { Question, QuestionErrors } from "@/data/types";
+import { isEmpty } from "@/helper/objectHelper";
 import { QuestionsArraySchema } from "@/helper/validations";
-import { Box, Button, Center, Flex, Spinner, VStack } from "@chakra-ui/react";
-import { useEffect, useRef } from "react";
+import { useTemporaryFlag } from "@/hooks/useTemporaryHook";
+import {
+  Alert,
+  Box,
+  Button,
+  Center,
+  Flex,
+  Link,
+  Spinner,
+  VStack,
+  Text,
+} from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 import { ZodError } from "zod";
+
+
+function FormValidationAlert({ valid }: { valid: boolean }) {
+  const { setSelectedTab } = useTabStore()
+  return (
+    <Alert.Root status={valid ? "success" : "error"}>
+      <Alert.Indicator />
+      <Alert.Content>
+        <Alert.Description>
+          {valid && 
+          <Text>
+            Your form has validated successfully,
+            <Link ml="1" cursor="pointer" as="span" onClick={()=>setSelectedTab(PREVIEW_TAB)}>continue to Preview</Link>
+          </Text>
+          
+          }
+ 
+          {!valid && "Your form validation has failed. Please correct the errors and try again"}
+        </Alert.Description>
+      </Alert.Content>
+    </Alert.Root>
+  );
+}
 
 export default function Builder() {
   const {
@@ -22,6 +58,9 @@ export default function Builder() {
 
   const lastQuestionRef = useRef<HTMLInputElement | null>(null);
   const isInitialRender = useRef(true);
+  const [errors, setErrors] = useState<QuestionErrors | null>(null);
+  const { flag: showAlertFlag, activate: showValidationAlert } =
+    useTemporaryFlag(10000);
 
   useEffect(() => {
     return () => {
@@ -40,7 +79,7 @@ export default function Builder() {
   function handleDataChange(id: string, data: Question) {
     try {
       const validatedData = QuestionsArraySchema.parse([data]);
-      console.log("✅ Validation successful:", validatedData);
+      console.log("Validation successful:", validatedData);
       updateQuestion(id, data, true);
     } catch (err) {
       if (err instanceof ZodError) {
@@ -71,6 +110,18 @@ export default function Builder() {
     }
   }, [addingQuestion]);
 
+  const validateQuestions = (questions: Question[]) => {
+    const result = QuestionsArraySchema.safeParse(questions);
+    return !result.success ? result.error.format() : null;
+  };
+
+  const validateForm = () => {
+    const validationErrors = validateQuestions(questions);
+    setErrors(validationErrors);
+
+    showValidationAlert()
+  };
+
   return (
     <>
       {fetchingQuestions ? (
@@ -90,6 +141,7 @@ export default function Builder() {
                 data={data}
                 removing={removingQuestionId === data.id}
                 onRemove={() => removeQuestionHandler(data.id)}
+                errors={errors?.[index] ?? null}
               />
             ))}
           </VStack>
@@ -100,11 +152,19 @@ export default function Builder() {
               loading={addingQuestion}
             />
           </Flex>
-          <Button w="100%" colorPalette="pink" variant="solid" my="2">
-            Publish
+          <Button
+            w="100%"
+            colorPalette="pink"
+            variant="solid"
+            my="2"
+            onClick={validateForm}
+          >
+            Validate
           </Button>
         </Box>
       )}
+
+      {showAlertFlag && <FormValidationAlert valid={isEmpty(errors)} />}
     </>
   );
 }

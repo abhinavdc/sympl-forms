@@ -63,6 +63,7 @@ interface FormBuilderStore {
   fetchingQuestions: boolean;
   removingQuestionId: string | null;
   updatingQuestionId: string | null;
+  resetFormField: () => void;
   getQuestions: () => void;
   addQuestion: (value: QUESTION_TYPE) => void;
   removeQuestion: (id: string) => void;
@@ -76,7 +77,12 @@ export const useFormBuilderStore = create<FormBuilderStore>((set) => ({
   removingQuestionId: null,
   updatingQuestionId: null,
   resetFormField: () => {
-    
+    set((state) => ({
+      questions: state.questions.map((question) => ({
+        ...question,
+        value: "", // Reset value
+      }))
+    }))
   },
   getQuestions: async () => {
     set({ fetchingQuestions: true });
@@ -130,5 +136,5 @@ export const useFormBuilderStore = create<FormBuilderStore>((set) => ({
         question.id === id ? { ...question, ...data } : question
       ),
     }));
-  },
+  }
 }));

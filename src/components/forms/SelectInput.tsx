@@ -10,21 +10,24 @@ import {
 import QuestionContainer from "./QuestionContainer";
 import { LuCircleMinus, LuPlus } from "react-icons/lu";
 import { Ref } from "react";
-import { Question } from "@/data/types";
+import { Question, QuestionErrors } from "@/data/types";
+import { ZodFormattedError } from "zod";
 
 export default function SelectInput({
   ref,
+  errors,
   onChange,
   data,
   onRemove,
   removing,
   ...rest
 }: {
-  removing: boolean,
   ref: Ref<HTMLInputElement>,
+  errors: QuestionErrors[number] | null,
   onRemove: VoidFunction;
   data: Question;
   onChange: (data: Question) => void;
+  removing: boolean,
 } & InputProps) {
   function onChangeRequiredHandler(checked: boolean) {
     onChange({
@@ -72,7 +75,7 @@ export default function SelectInput({
 
   return (
     <QuestionContainer required={data.meta.required} onChangeRequired={onChangeRequiredHandler} type={data.type} onRemove={onRemove} removing={removing}>
-      <Field.Root px="5">
+      <Field.Root px="5" invalid={!!errors?.meta?.label?._errors}>
         <Field.Label justifyContent="space-between" w="100%" p="5px">
           <Input
             _focusVisible={{ boxShadow: "0 0px 0 0 black inset" }}
@@ -91,7 +94,10 @@ export default function SelectInput({
             ref={ref}
           />
         </Field.Label>
-        <VStack alignItems="flex-start">
+        <Field.ErrorText>{errors?.meta?.label?._errors[0]}</Field.ErrorText>
+      </Field.Root>
+      <Field.Root px="5" invalid={!!(errors?.meta as ZodFormattedError<{ options: string[] }>)?.options?._errors}>
+        <VStack alignItems="flex-start" mt="2">
           {data.meta.options.map((x: string, index: number) => (
             <HStack key={index}>
               <Input
@@ -108,11 +114,13 @@ export default function SelectInput({
               </IconButton>
             </HStack>
           ))}
+          <Field.ErrorText>{(errors?.meta as ZodFormattedError<{ options: string[] }>)?.options?._errors[0]}</Field.ErrorText>
           <Button variant="ghost" size="xs" onClick={addOption}>
             <LuPlus /> Add Option
           </Button>
         </VStack>
       </Field.Root>
+
     </QuestionContainer>
   );
 }

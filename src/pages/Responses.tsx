@@ -24,12 +24,11 @@ export default function Responses() {
       {fetchingResponses ? <PageLoader /> :
       
       responses?.length ? (
-        <AccordionRoot spaceY="4" collapsible bg="gray.50" variant="enclosed">
+        <AccordionRoot collapsible bg="gray.50" variant="enclosed">
           {responses?.map((item, index) => (
             <AccordionItem key={index} value={item.submissionId}>
-              <AccordionItemTrigger>
-                {item.question[0].meta.label} -
-                {convertDateStringToHumanReadable(item.submittedDate)}
+              <AccordionItemTrigger h="80px">
+                {`${item.question[0].meta.label} - ${convertDateStringToHumanReadable(item.submittedDate)}`}
               </AccordionItemTrigger>
               <AccordionItemContent>
                 {item.question.slice(1).map(({ id, meta, value }) => (
