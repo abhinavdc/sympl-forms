@@ -22,6 +22,7 @@ Form Preview: Render and validate forms using the generated schema.
 
 Other
  - Responsiveness on mobile devices
+ - Git messages based on Conventional Commits spec 
 
 ### 🛠️ Tech Stack
 - React + TypeScript: End-to-end type safety
