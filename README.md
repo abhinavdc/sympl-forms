@@ -1,50 +1,41 @@
-# React + TypeScript + Vite
+### 📝 Sympl Forms
+A simple form builder built with React and TypeScript that allows users to create, validate, preview and receive responses with auto-save functionality.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### ✨ Features
+Form Builder: Supports Text, Number, and Select fields with built-in validations and auto-save.
+ - Provide Custom Form Name
+ - Auto Save on valid changes with saving indication
+ - Validation of Form Builder fields
+ - Mock API save to Local Storage
+ - Mock API fetch from Local Storage on page refresh
+ - Custom Validation Rules for Text and Number
 
-Currently, two official plugins are available:
+Response List: View saved form responses
+ - Fetch Responses from LocalStorage
+ - Show Form Response based on Form Schema
+ - Collapsible View
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Form Preview: Render and validate forms using the generated schema.
+ - Generate Form Preview from Schema
+ - Validate Form Values based on Custom Validation Rules and Required Checkbox
+ - Submit valid form and save response 
 
-## Expanding the ESLint configuration
+Other
+ - Responsiveness on mobile devices
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### 🛠️ Tech Stack
+- React + TypeScript: End-to-end type safety
+- Vite: Fast and efficient build tool
+- Chakra UI: Responsive and accessible design components
+- Zustand: Lightweight state management
+- Zod: Form schema validation
 
-- Configure the top-level `parserOptions` property like this:
+### ✅ To Be Done
+- Support pre-filled form values
+- Custom validation rules for Select fields
+- Unit and integration tests
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### 💻 Run the Application
+````bash
+npm install
+npm run dev
