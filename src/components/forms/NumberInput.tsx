@@ -1,7 +1,12 @@
-import { Field, Input, InputProps } from "@chakra-ui/react";
+import { Button, Field, Flex, Input, InputProps } from "@chakra-ui/react";
 import QuestionContainer from "./QuestionContainer";
-import { Ref } from "react";
-import { Question } from "@/data/types";
+import { Ref, useState } from "react";
+import {
+  Question,
+  ValidationRule,
+} from "@/data/types";
+import ValidationRules from "./ValidationRules";
+import { LuChevronDown, LuChevronUp } from "react-icons/lu";
 
 export default function NumberInput({
   ref,
@@ -17,12 +22,33 @@ export default function NumberInput({
   onChange: (data: Question) => void;
   removing: boolean;
 } & InputProps) {
+  const [showValidationRules, setShowValidationRules] = useState(false)
+
   function onChangeRequiredHandler(checked: boolean) {
     onChange({
       ...data,
       meta: { ...data.meta, required: checked },
     });
   }
+
+  function onRuleChangeHandler(updatedRules: ValidationRule[]) {
+    onChange({
+      ...data,
+      meta: {
+        ...data.meta,
+        validation: { ...data.meta.validation, rules: updatedRules },
+      },
+    });
+  }
+
+  function handleCustomValidation() {
+    if (showValidationRules) {
+      // remove validation
+      onRuleChangeHandler([])
+    }
+    setShowValidationRules(!showValidationRules)
+  }
+  
 
   return (
     <QuestionContainer
@@ -57,6 +83,13 @@ export default function NumberInput({
         </Field.Label>
         <Input value="number answer" disabled />
       </Field.Root>
+      {showValidationRules && <ValidationRules rules={data.meta.validation.rules} onChange={onRuleChangeHandler} />}
+      <Flex justifyContent="flex-end" px="5">
+        <Button variant="outline" colorPalette="pink" size="xs" onClick={handleCustomValidation}>
+        {showValidationRules ? <LuChevronUp /> : <LuChevronDown /> }
+          {`${showValidationRules ? "Remove" : "Add"} Custom Validation`}
+        </Button>
+      </Flex>
     </QuestionContainer>
   );
 }

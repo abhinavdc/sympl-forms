@@ -54,7 +54,6 @@ export default function Preview() {
   }, [getQuestions, questions.length]);
 
   function handleDataChange(id: string, data: Question) {
-    console.log(id, data.value);
     updateQuestion(id, data, false);
   }
 

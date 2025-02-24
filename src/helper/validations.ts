@@ -3,7 +3,39 @@ import { Question, ValidationRule } from "@/data/types";
 
 import { z } from "zod";
 
-// Base schema for every question
+// Rule schemas
+const RegexRuleSchema = z.object({
+  type: z.literal("regex"),
+  pattern: z.string(),
+  message: z.string().optional(),
+});
+
+const LengthRuleSchema = z.object({
+  type: z.literal("length"),
+  min: z.number().optional(),
+  max: z.number().optional(),
+  message: z.string().optional(),
+});
+
+const GreaterThanRuleSchema = z.object({
+  type: z.literal("greater_than"),
+  value: z.number(),
+  message: z.string().optional(),
+});
+
+const LessThanRuleSchema = z.object({
+  type: z.literal("less_than"),
+  value: z.number(),
+  message: z.string().optional(),
+});
+
+const ValidationRuleSchema = z.union([
+  RegexRuleSchema,
+  LengthRuleSchema,
+  GreaterThanRuleSchema,
+  LessThanRuleSchema,
+]);
+
 const BaseQuestionSchema = z.object({
   id: z.string().min(1, "ID is required"),
   editable: z.boolean(),
@@ -12,18 +44,13 @@ const BaseQuestionSchema = z.object({
     options: z.array(z.string()),
     required: z.boolean(),
     validation: z.object({
-      rules: z.array(
-        z.object({
-          type: z.union([z.literal("regex"), z.literal("length")]),
-          pattern: z.string(),
-        })
-      ),
+      rules: z.array(ValidationRuleSchema),
     }),
   }),
   value: z.union([z.string(), z.number()]).optional(),
 });
 
-/// For TEXT and NUMBER types, no extra options are needed
+
 const TextQuestionSchema = BaseQuestionSchema.extend({
   type: z.literal(QUESTION_TYPE.TEXT),
 });
@@ -32,7 +59,6 @@ const NumberQuestionSchema = BaseQuestionSchema.extend({
   type: z.literal(QUESTION_TYPE.NUMBER),
 });
 
-// For SELECT, options must have at least one value
 const SelectQuestionSchema = BaseQuestionSchema.extend({
   type: z.literal(QUESTION_TYPE.SELECT),
   meta: BaseQuestionSchema.shape.meta.extend({
@@ -40,7 +66,6 @@ const SelectQuestionSchema = BaseQuestionSchema.extend({
   }),
 });
 
-// For FORM_HEADER, only label is required
 const FormHeaderSchema = BaseQuestionSchema.extend({
   type: z.literal(QUESTION_TYPE.FORM_HEADER),
   meta: BaseQuestionSchema.shape.meta.pick({
@@ -48,7 +73,6 @@ const FormHeaderSchema = BaseQuestionSchema.extend({
   }),
 });
 
-// Combine into a union type for dynamic form
 export const QuestionSchema = z.union([
   TextQuestionSchema,
   NumberQuestionSchema,
@@ -56,7 +80,6 @@ export const QuestionSchema = z.union([
   FormHeaderSchema,
 ]);
 
-// For an array of questions
 export const QuestionsArraySchema = z.array(QuestionSchema);
 
 export const validateRules = (
@@ -74,11 +97,11 @@ export const validateRules = (
         break;
 
       case "length":
-        if (typeof value === "string") {
-          if (rule.min !== undefined && value.length < rule.min) {
+        if (typeof value === "string" || typeof value === "number") {
+          if (rule.min !== undefined && String(value).length < rule.min) {
             errors.push(rule.message || `Must be at least ${rule.min} characters.`);
           }
-          if (rule.max !== undefined && value.length > rule.max) {
+          if (rule.max !== undefined && String(value).length > rule.max) {
             errors.push(rule.message || `Must be at most ${rule.max} characters.`);
           }
         }
@@ -96,11 +119,6 @@ export const validateRules = (
         }
         break;
 
-      case "equals":
-        if (value !== rule.value) {
-          errors.push(rule.message || `Must be equal to ${rule.value}.`);
-        }
-        break;
     }
   }
 

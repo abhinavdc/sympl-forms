@@ -1,38 +1,36 @@
 import { IconType } from "react-icons";
 import { QUESTION_TYPE } from "./constants";
 
-type RegexRule = {
+export type RegexRule = {
   type: "regex";
   pattern: string;
   message?: string;
 };
 
-type LengthRule = {
+export type LengthRule = {
   type: "length";
   min?: number;
   max?: number;
   message?: string;
 };
 
-type GreaterThanRule = {
+export type GreaterThanRule = {
   type: "greater_than";
   value: number;
   message?: string;
 };
 
-type LessThanRule = {
+export type LessThanRule = {
   type: "less_than";
   value: number;
   message?: string;
 };
 
-type EqualsRule = {
-  type: "equals";
-  value: string | number;
-  message?: string;
-};
-
-export type ValidationRule = RegexRule | LengthRule | GreaterThanRule | LessThanRule | EqualsRule;
+export type ValidationRule =
+  | RegexRule
+  | LengthRule
+  | GreaterThanRule
+  | LessThanRule;
 
 export interface Question {
   id: string;
@@ -68,4 +66,14 @@ export class Response {
   private generateId(): string {
     return Math.random().toString(36).substring(2, 10); // Random 8-character ID
   }
+}
+
+export interface ValidationOnChange {
+  ruleType: ValidationRule["type"];
+  value: number | string;
+  extraProp?:
+    | keyof LengthRule
+    | keyof RegexRule
+    | keyof GreaterThanRule
+    | keyof LessThanRule;
 }
