@@ -40,3 +40,14 @@ Other
 ````bash
 npm install
 npm run dev
+````
+
+### Screenshots
+![Screenshot_24-2-2025_22225_localhost](https://github.com/user-attachments/assets/9c7a7bc2-6dca-47d7-aa2a-30693c031f41)
+
+![Screenshot_24-2-2025_222223_localhost](https://github.com/user-attachments/assets/8a2a8628-e598-4807-a16a-3e26a9097c45)
+
+![Screenshot_24-2-2025_222237_localhost](https://github.com/user-attachments/assets/f8e949fb-49b3-43ae-af23-7047078d468b)
+
+![Screenshot_24-2-2025_22239_localhost](https://github.com/user-attachments/assets/92ab7f5b-b4a7-425d-abf2-1dca4434223b)
+
