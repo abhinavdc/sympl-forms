@@ -66,7 +66,6 @@ export default function Preview() {
         showSuccessAlert();
       }
     }
-
   }
 
   return (

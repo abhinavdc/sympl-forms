@@ -18,7 +18,7 @@ function initQuestionFromType(type: QUESTION_TYPE): Question {
     editable: true,
     meta: {
       label: capitalizeFirstLetter(type as string) + " Question Goes Here",
-      options: [],
+      options: type === QUESTION_TYPE.SELECT ? ["New Option"] : [],
       required: false,
       validation: {
         rules: [],
